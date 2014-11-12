@@ -30,10 +30,10 @@ args_list2 = [\
 ]
 
 args_list3 = [\
-'-groupsingle -srate 100 -maxgrp 500 -rad 0.5 -bbox HAND -feat HANDHOG -alg fdpp -ts 200', \
-'-groupsingle -srate 100 -maxgrp 500 -rad 0.5 -bbox HAND -feat HANDHOG -alg kmeans -ts 200', \
-'-groupsingle -srate 100 -maxgrp 500 -rad 0.5 -bbox HAND -feat HANDHOG -alg nrpc -ts 200', \
-'-groupsingle -srate 100 -maxgrp 500 -rad 0.5 -bbox HAND -feat HANDHOG -alg dpmm -ts 200' \
+'-groupsingle -srate 100 -maxgrp 500 -rad 0.35 -bbox HAND -feat HANDHOG -alg fdpp -ts 200', \
+'-groupsingle -srate 100 -maxgrp 500 -rad 0.35 -bbox HAND -feat HANDHOG -alg kmeans -ts 200', \
+'-groupsingle -srate 100 -maxgrp 500 -rad 0.35 -bbox HAND -feat HANDHOG -alg nrpc -ts 200', \
+'-groupsingle -srate 100 -maxgrp 500 -rad 0.35 -bbox HAND -feat HANDHOG -alg dpmm -ts 200' \
 ]
 
 work_dir = '../bbox_ide'

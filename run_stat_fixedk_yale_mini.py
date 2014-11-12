@@ -6,48 +6,17 @@ import matplotlib.pyplot as plt
 from parse import *
 from statistics import *
 
-param_file = '../_UTG/params/All.txt'
-label_dir = '../_UTG/labels/'
-group_dir = '../_UTG/groups/'
+param_file = '../_YHG_MINI/params/All.txt'
+label_file = '../_YHG/fullDatasetBlack.csv'
+group_dir = '../_YHG_MINI/groups/'
 
-group_results_fkdpp = [\
-	'HAND_HANDHOG100_R100_C500_T30_fkdpp_k5/single/',\
-	'HAND_HANDHOG100_R100_C500_T30_fkdpp_k10/single/',\
-	'HAND_HANDHOG100_R100_C500_T30_fkdpp_k20/single/',\
-	'HAND_HANDHOG100_R100_C500_T30_fkdpp_k30/single/',\
-	'HAND_HANDHOG100_R100_C500_T30_fkdpp_k50/single/',\
-	'HAND_HANDHOG100_R100_C500_T30_fkdpp_k80/single/',\
-	'HAND_HANDHOG100_R100_C500_T30_fkdpp_k100/single/',\
-	'HAND_HANDHOG100_R100_C500_T30_fkdpp_k120/single/'\
-]
+nk = [5,10,20,30,50,80,100,120,150]
 
-group_results_fkmeans = [\
-	'HAND_HANDHOG100_R100_C500_T30_fkmeans1_k5/single/',\
-	'HAND_HANDHOG100_R100_C500_T30_fkmeans1_k10/single/',\
-	'HAND_HANDHOG100_R100_C500_T30_fkmeans1_k20/single/',\
-	'HAND_HANDHOG100_R100_C500_T30_fkmeans1_k30/single/',\
-	'HAND_HANDHOG100_R100_C500_T30_fkmeans1_k50/single/',\
-	'HAND_HANDHOG100_R100_C500_T30_fkmeans1_k80/single/',\
-	'HAND_HANDHOG100_R100_C500_T30_fkmeans1_k100/single/',\
-	'HAND_HANDHOG100_R100_C500_T30_fkmeans1_k120/single/'\
-]
-
-nk = [5,10,20,30,50,80,100,120]
+group_results_fkdpp = ['HAND_HANDHOG100_R100_C500_T39_fkdpp_k{0}/single/'.format(k) for k in nk]
+group_results_fkmeans = ['HAND_HANDHOG100_R100_C500_T39_fkmeans1_k{0}/single/'.format(k) for k in nk]
 
 params = parse_params(param_file)
-#print params
-
-# key: vid
-# val: [[grasp string, sf, ef], ...]
-labels = dict();
-for param in params:
-	grasps = parse_grasp_labels(label_dir + str(param[0]) + '_grasp.txt')
-	for grasp in grasps:
-		if param[0] not in labels:
-			labels[param[0]] = list()
-		labels[param[0]].append([grasp[0], grasp[1], grasp[2]])
-#print labels
-labels = fix_utg_labels(labels, params)
+labels = parse_yale_labels(label_file, params)
 
 # count grasp types
 grasp_set = set()
@@ -70,7 +39,7 @@ for i in range(len(nk)):
 	grasp_stats_kdpp.append(gs)
 	grasp_types_kdpp.append(len(gs))
 
-print grasp_types_kdpp
+print 'KDPP:',grasp_types_kdpp
 
 # kmeans
 grasp_stats_kmeans = list()
@@ -86,18 +55,23 @@ for i in range(len(nk)):
 	grasp_stats_kmeans.append(gs)
 	grasp_types_kmeans.append(len(gs))
 
-print grasp_types_kmeans
+print 'KMEANS:',grasp_types_kmeans
 
 width = 0.8
 plt.figure(1)
+plt.grid()
+plt.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.1)
 ax = plt.subplot(111)
-plt.title('Grasp Types')
-ax.scatter(nk, grasp_types_kmeans, s = 30, c = 'b', marker = u'D')
-ax.plot(nk, grasp_types_kmeans, c = 'b')
-ax.scatter(nk, grasp_types_kdpp, s = 30, c = 'g', marker = u'D')
-ax.plot(nk, grasp_types_kdpp, c = 'g')
+plt.title('YALE: Number of Grasp Types')
+ax.scatter(nk, grasp_types_kmeans, s = 50, c = 'b', marker = u'D')
+ax.plot(nk, grasp_types_kmeans, c = 'b', linewidth=3, label = 'K-Means')
+ax.scatter(nk, grasp_types_kdpp, s = 50, c = 'g', marker = u'D')
+ax.plot(nk, grasp_types_kdpp, c = 'g', linewidth=3, label = 'K-DPP')
 ax.set_xticks(np.array(nk) + width/2)
 ax.set_xticklabels(nk, rotation=0)
+ax.set_xlabel('K - Number of Clusters')
+#ax.set_ylabel('Number of Grasp Types')
+ax.legend(loc=4)
 
 '''
 ink = 3;

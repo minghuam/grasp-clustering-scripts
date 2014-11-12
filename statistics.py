@@ -41,6 +41,8 @@ def stat_grasp_types(seq, labels):
 				grasp_stat[grasp] = 0
 			grasp_stat[grasp] += 1
 
+	print 'Grasp Types:',len(grasp_stat)
+
 	return grasp_stat
 
 
@@ -70,6 +72,7 @@ def stat_purity(seq, labels, cluster_size_threshold = 1):
 	for c in clusters:
 		if len(clusters[c]) < cluster_size_threshold:
 			continue
+		#print c,len(clusters[c]), clusters[c]
 		grasp_count = dict();
 		# get majority grasp
 		for vid_frame in clusters[c]:
@@ -95,6 +98,7 @@ def stat_purity(seq, labels, cluster_size_threshold = 1):
 							purity_count += 1
 							this_majority += 1
 			#print 'cluster: {0}, majority: {2}/{3}'.format(c,len(clusters[c]), this_majority, this_all)
+	print 'Clusters:',cluster_count
 	print 'Majority Count:',purity_count
 	print 'All Count:', all_count
 	print 'Purity:', float(purity_count)/all_count
@@ -260,7 +264,7 @@ def stat_PR(seq, labels, cluster_size_threshold = 1):
 	ACCURACY = float(TP + TN)/(TOTAL)
 	F1 = (1+1*1)*PRECISION*RECALL/(1*1*PRECISION + RECALL)
 
-	#print 'TOTAL =',TOTAL
+	print 'TOTAL =',TOTAL
 	print 'TP =',TP
 	print 'FP =',FP
 	print 'TN =',TN

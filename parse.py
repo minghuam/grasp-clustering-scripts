@@ -33,13 +33,12 @@ def parse_yale_labels(f, params):
 				duration = float(words[6])
 				end_time = start_time + duration - 1/25.0
 				labels[vid].append([grasp, int(start_time*25), int(end_time*25)])
-
-	"""
+	'''
 	for vid in labels:
 		start = min([l[1] for l in labels[vid]])
 		end = max([l[2] for l in labels[vid]])
 		print vid, start, end
-	"""
+	'''
 	return labels
 
 def parse_utg_labels(d, params):
@@ -123,9 +122,9 @@ def merge_utg_labels(labels, params):
 		'thumb-index finger':'precision-thumb-fingers',\
 		'thumb-3 finger':'precision-thumb-fingers',\
 		'medium wrap':'medium wrap',\
-		'#small diameter':'power-diameter',\
+		'#small diameter':'heavry-wrap',\
 		'index finger extension':'index finger extension',\
-		'large diameter':'power-diameter',\
+		'large diameter':'heavry-wrap',\
 		'ring':'ring',\
 		'power sphere':'power sphere',\
 		'#tip pinch':'precision-thumb-fingers',\

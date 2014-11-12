@@ -6,25 +6,22 @@ import matplotlib.pyplot as plt
 from parse import *
 from statistics import *
 
-param_file = '../_UTG/params/All.txt'
-label_dir = '../_UTG/labels/'
-group_dir = '../_UTG/groups/'
+param_file = '../_YHG_MINI/params/All.txt'
+label_file = '../_YHG/fullDatasetBlack.csv'
+group_dir = '../_YHG_MINI/groups/'
+
 
 group_results = [\
-	'HAND_HANDHOG100_R100_C500_T30_fdpp/single/',\
-	'HAND_HANDHOG100_R100_C500_T30_kmeans/single/', \
-	'HAND_HANDHOG100_R100_C500_T30_nrpc/single/', \
-	'HAND_HANDHOG100_R100_C500_T30_dpmm/single/' \
+	'HAND_HANDHOG100_R100_C500_T40_fdpp/single/',\
+	'HAND_HANDHOG100_R100_C500_T40_kmeans/single/', \
+	'HAND_HANDHOG100_R100_C500_T40_nrpc/single/', \
+	'HAND_HANDHOG100_R100_C500_T40_dpmm/single/' \
 ]
 
 alogs = ['FDPP', 'KMEANS', 'NRPC', 'DPMM']
 
 params = parse_params(param_file)
-
-labels = parse_utg_labels(label_dir, params)
-
-#labels = fix_utg_labels(labels, params)
-labels = merge_utg_labels(labels, params)
+labels = parse_yale_labels(label_file, params)
 
 # count grasp types
 grasp_set = set()
@@ -40,16 +37,16 @@ grasp_stats_nmi = list()
 grasp_stats_pr = list()
 for i in range(len(group_results)):
 	print '\n***************',group_results[i],'***************'
-	#seq = parse_sequence_knn(os.path.join(group_dir, group_results[i]))
 	seq = parse_sequence_bbox(os.path.join(group_dir, group_results[i]))
+
 	# change video name...
 	for i in xrange(0, len(seq)):
 		seq[i][0] = params[seq[i][0]][0]
 
 	grasp_stats_types.append(stat_grasp_types(seq, labels))
 	grasp_stats_purity.append(stat_purity(seq, labels, 3))
-	grasp_stats_nmi.append(stat_nmi(seq, labels, 3))
-	grasp_stats_pr.append(stat_PR(seq, labels, 3))
+	grasp_stats_nmi.append(stat_nmi(seq, labels, 2))
+	grasp_stats_pr.append(stat_PR(seq, labels, 2))
 
 plt.figure(1)
 width = 0.8
@@ -59,7 +56,7 @@ plot_index = 241
 cluster_size = [s[0] for s in grasp_stats_purity]
 ax = plt.subplot(plot_index)
 plot_index += 1
-plt.title('Number of Clusters')
+plt.title('YALE: Number of Clusters')
 ax.bar(range(len(cluster_size)), cluster_size, width = width)
 ax.set_xticks(np.arange(len(cluster_size)) + width/2)
 ax.set_xticklabels(alogs, rotation=0)
@@ -128,4 +125,3 @@ ax.set_xticks(np.arange(len(accuracy)) + width/2)
 ax.set_xticklabels(alogs, rotation=0)
 
 plt.show()
-
